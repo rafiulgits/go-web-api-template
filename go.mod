@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/go-chi/chi v1.5.4
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/rafiulgits/go-automapper v0.1.1
 	github.com/rafiulgits/gotnet v0.1.1
 	go.uber.org/zap v1.21.0
 	gorm.io/driver/sqlserver v1.3.1

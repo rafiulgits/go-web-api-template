@@ -3,6 +3,7 @@ package services
 import (
 	"webapi/models/domains"
 	"webapi/models/dtos"
+	"webapi/models/mapper"
 	"webapi/repositories"
 )
 
@@ -26,9 +27,9 @@ func (that *DemoService) CreateDemo() (*dtos.DemoDto, *dtos.ErrorDto) {
 	if err != nil {
 		return nil, dtos.NewErrorDto(err.Error())
 	}
-	return &dtos.DemoDto{
-		ID: createdDemo.ID,
-	}, nil
+	demoDto := &dtos.DemoDto{}
+	mapper.Map(createdDemo, demoDto)
+	return demoDto, nil
 }
 
 func (that *DemoService) GetAllDemos() ([]*dtos.DemoDto, *dtos.ErrorDto) {
@@ -37,8 +38,8 @@ func (that *DemoService) GetAllDemos() ([]*dtos.DemoDto, *dtos.ErrorDto) {
 		return nil, dtos.NewErrorDto(err.Error())
 	}
 	demoDtos := make([]*dtos.DemoDto, 0)
-	for _, item := range demos {
-		demoDtos = append(demoDtos, &dtos.DemoDto{ID: item.ID})
-	}
+	mapper.Map(demos, &demoDtos, func(i int, s *domains.Demo, d *dtos.DemoDto) {
+	})
+
 	return demoDtos, nil
 }
