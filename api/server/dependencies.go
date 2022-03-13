@@ -3,6 +3,7 @@ package server
 import (
 	"webapi/configs"
 	"webapi/db"
+	"webapi/models"
 	"webapi/repositories"
 	"webapi/services"
 
@@ -11,6 +12,7 @@ import (
 
 func injectDependencies(dependency *gotnet.Service) {
 	dependency.AddSingleton(configs.LoadConfig)
+	dependency.AddSingleton(models.NewValidator)
 	dependency.AddSingleton(services.NewDemoService)
 	dependency.AddSingleton(repositories.NewDemoRepository)
 	dependency.AddSingleton(db.OpenConnection)

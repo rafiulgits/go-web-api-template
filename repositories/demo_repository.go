@@ -10,6 +10,7 @@ import (
 )
 
 type IDemoRepository interface {
+	IBaseRepository
 	Get(id int) (*domains.Demo, error)
 	GetByFilter(filter interface{}, args ...interface{}) (*domains.Demo, error)
 	GetAll() ([]*domains.Demo, error)
