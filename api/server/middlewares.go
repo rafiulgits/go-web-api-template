@@ -6,12 +6,14 @@ import (
 	"webapi/db"
 	"webapi/logger"
 
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-playground/validator/v10"
 	"github.com/rafiulgits/gotnet"
 )
 
 // middlewares
 func ConfigureMiddlewares(app *gotnet.App) {
+	preload(app.Service)
 	parseConsoleArgs(app.Service)
 	configureLogger(app)
 }
@@ -21,12 +23,16 @@ func BeforeAppRun(app *gotnet.App) {
 	dbMigration(app.Service.Container())
 }
 
-func parseConsoleArgs(service *gotnet.Service) {
-	// invoking app config to ensure appsettings parse
-	err := service.Container().Invoke(func(cfg *configs.AppConfig) {})
+func preload(service *gotnet.Service) {
+	err := service.Container().Invoke(func(
+		cfg *configs.AppConfig, validator *validator.Validate) {
+	})
 	if err != nil {
 		panic(err)
 	}
+}
+
+func parseConsoleArgs(service *gotnet.Service) {
 	dbMigration := flag.Bool("dbmigration", false, "Run with database migration")
 	port := flag.Int("port", 8080, "Application port")
 	debug := flag.Bool("debug", false, "Run app in debug mode")
