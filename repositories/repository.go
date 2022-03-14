@@ -8,6 +8,7 @@ import (
 
 type IBaseRepository interface {
 	Any(query interface{}, args ...interface{}) error
+	GetQueryable() *gorm.DB
 }
 
 type BaseRepository struct {
@@ -24,4 +25,8 @@ func (repo *BaseRepository) Any(query interface{}, args ...interface{}) error {
 		return errors.New("no record not found")
 	}
 	return nil
+}
+
+func (repo *BaseRepository) GetQueryable() *gorm.DB {
+	return repo.db.Session(&gorm.Session{})
 }
