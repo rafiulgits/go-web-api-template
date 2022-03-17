@@ -6,17 +6,18 @@ import (
 )
 
 type IDemoRepository interface {
-	IBaseRepository
+	IBaseRepository[int, domains.Demo]
 }
 
 type DemoRepository struct {
-	*BaseRepository
+	*BaseRepository[int, domains.Demo]
 }
 
 func NewDemoRepository(db *db.DB) IDemoRepository {
 	return &DemoRepository{
-		&BaseRepository{
-			db: db.Table(domains.DemoTableName),
+		&BaseRepository[int, domains.Demo]{
+			db:        db.DB,
+			tableName: domains.DemoTableName,
 		},
 	}
 }

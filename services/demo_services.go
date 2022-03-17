@@ -23,23 +23,23 @@ func NewDemoService(demoRepository repositories.IDemoRepository) IDemoService {
 }
 
 func (that *DemoService) CreateDemo() (*dtos.DemoDto, *dtos.ErrorDto) {
-	demoToCreate := &domains.Demo{}
-	if err := that.demoRepository.GetQueryable().Create(demoToCreate).Error; err != nil {
+	var demoToCreate domains.Demo
+	createdDemo, err := that.demoRepository.Create(&demoToCreate)
+	if err != nil {
 		return nil, dtos.NewDatabaseError(err)
 	}
 	demoDto := &dtos.DemoDto{}
-	mapper.Map(demoToCreate, demoDto)
+	mapper.Map(createdDemo, demoDto)
 	return demoDto, nil
 }
 
 func (that *DemoService) GetAllDemos() ([]*dtos.DemoDto, *dtos.ErrorDto) {
-	var demos []*domains.Demo
-	if err := that.demoRepository.GetQueryable().Find(&demos).Error; err != nil {
+	demos, err := that.demoRepository.GetAll()
+	if err != nil {
 		return nil, dtos.NewDatabaseError(err)
 	}
 	demoDtos := make([]*dtos.DemoDto, 0)
 	mapper.Map(demos, &demoDtos, func(i int, s *domains.Demo, d *dtos.DemoDto) {
 	})
-
 	return demoDtos, nil
 }
